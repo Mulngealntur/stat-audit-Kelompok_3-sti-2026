@@ -54,7 +54,7 @@ def beta_posterior(k, m):
     return {"alpha": alpha, "beta": beta, "mode": mode, "mean": mean}
 
 def log_likelihood_bernoulli(theta, k, n):
-    
+
     if np.any(theta <= 0) or np.any(theta >= 1):
         raise ValueError("theta harus berada di interval (0, 1).")
     
@@ -62,3 +62,17 @@ def log_likelihood_bernoulli(theta, k, n):
         raise ValueError("Pastikan 0 ≤ k ≤ n dan n > 0.")
 
     return k * np.log(theta) + (n - k) * np.log(1 - theta)
+
+def log_likelihood_poisson(theta, data):
+    theta = np.asarray(theta, dtype = float)
+    if np.any(theta <= 0):
+        raise ValueError("theta harus > 0.")
+    arr = np.asarray(data)
+    if arr.size == 0:
+        raise ValueError("Data tidak boleh kosong.")
+    if np.any(arr < 0):
+        raise ValueError("Data Poisson harus non-negatif.")
+    sum_x = float(arr.sum())
+    n = int(arr.size)
+    sum_log_factorial = float(np.sum(np.lgamma( x + 1) for x in arr))
+    return sum_x * np.log(theta) - n * theta - sum_log_factorial
