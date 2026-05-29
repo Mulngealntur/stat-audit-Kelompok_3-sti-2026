@@ -1,4 +1,5 @@
 import numpy as np
+from pyparsing import alphas
 
 def mle_bernoulli(data):
     arr = np.asarray(data)
@@ -35,4 +36,20 @@ def mle_poisson(data):
 
     return float(arr.sum()) / float(arr.size)
 
+def beta_posterior(k, m):
+    if k < 0 or m < 0:
+        raise ValueError("Jumlah keberhasilan (k) dan kegagalan (m) harus non-negatif.")
+    if k == 0 and m == 0:
+        raise ValueError("Tidak dapat menentukan distribusi posterior dengan k=0 dan m=0.")
+
+    alpha = 1 + k
+    beta = 1 + m
+
+    denom = alpha + beta - 2
+
+    mode = (alpha - 1) / denom if denom > 0 else float("nan")
+
+    mean = alpha / (alpha + beta)
+
+    return {"alpha": alpha, "beta": beta, "mode": mode, "mean": mean}
 
