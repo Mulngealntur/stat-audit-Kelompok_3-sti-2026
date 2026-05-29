@@ -53,3 +53,12 @@ def beta_posterior(k, m):
 
     return {"alpha": alpha, "beta": beta, "mode": mode, "mean": mean}
 
+def log_likelihood_bernoulli(theta, k, n):
+    
+    if np.any(theta <= 0) or np.any(theta >= 1):
+        raise ValueError("theta harus berada di interval (0, 1).")
+    
+    if k < 0 or n <= 0 or k > n:
+        raise ValueError("Pastikan 0 ≤ k ≤ n dan n > 0.")
+
+    return k * np.log(theta) + (n - k) * np.log(1 - theta)
