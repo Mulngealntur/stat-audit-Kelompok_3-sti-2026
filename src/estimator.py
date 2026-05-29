@@ -6,11 +6,11 @@ def mle_bernoulli(data):
     if arr.size == 0:
         raise ValueError("Data tidak boleh kosong.")
 
-    # Konversi bool -> int agar bisa dijumlahkan secara numerik
+    
     if arr.dtype == bool:
         arr = arr.astype(int)
 
-    # Validasi bahwa semua nilai biner (0 atau 1)
+
     unique_vals = set(np.unique(arr).tolist())
     if not unique_vals.issubset({0, 1}):
         raise ValueError(
@@ -18,8 +18,8 @@ def mle_bernoulli(data):
             f"Nilai ditemukan: {unique_vals}"
         )
 
-    k = int(arr.sum())   # jumlah keberhasilan
-    n = int(arr.size)    # total observasi
+    k = int(arr.sum())   
+    n = int(arr.size)    
 
     return k / n
 
