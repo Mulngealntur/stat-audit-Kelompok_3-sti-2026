@@ -1,33 +1,38 @@
 import numpy as np
 
 def mle_bernoulli(data):
-    """
-    Menghitung Maximum Likelihood Estimation (MLE) untuk distribusi Bernoulli.
-    Referensi: Tsun (2020), halaman 254.
-    Formula: p_hat = k / n
-    """
-    k = np.sum(data) # Jumlah PR yang sukses di-merge (angka 1)
-    n = len(data)    # Total seluruh PR yang dianalisis
-    p_hat = k / n if n > 0 else 0
-    return {"p_hat": p_hat, "k": k, "n": n}
+    arr = np.asarray(data)
 
-def beta_posterior(k, n):
-    """
-    Menghitung parameter Beta Posterior menggunakan asumsi prior seragam (Beta(1,1)).
-    Referensi: Tsun (2020), halaman 269.
-    Formula: alpha = k + 1, beta = (n - k) + 1
-    """
-    m = n - k # Jumlah PR yang ditolak (angka 0)
-    alpha = k + 1
-    beta = m + 1
-    
-    # Menghitung Mode dan Mean dari Beta Posterior (Tsun 2020, p. 269)
-    mode = (alpha - 1) / (alpha + beta - 2) if (alpha + beta > 2) else 0
-    mean = alpha / (alpha + beta)
-    
-    return {
-        "alpha": alpha,
-        "beta": beta,
-        "mode": mode,
-        "mean": mean
-    }
+    if arr.size == 0:
+        raise ValueError("Data tidak boleh kosong.")
+
+    # Konversi bool -> int agar bisa dijumlahkan secara numerik
+    if arr.dtype == bool:
+        arr = arr.astype(int)
+
+    # Validasi bahwa semua nilai biner (0 atau 1)
+    unique_vals = set(np.unique(arr).tolist())
+    if not unique_vals.issubset({0, 1}):
+        raise ValueError(
+            f"Data harus berisi hanya 0/1 atau True/False. "
+            f"Nilai ditemukan: {unique_vals}"
+        )
+
+    k = int(arr.sum())   # jumlah keberhasilan
+    n = int(arr.size)    # total observasi
+
+    return k / n
+
+def mle_poisson(data):
+   
+    arr = np.asarray(data)
+    if arr.size == 0:
+        raise ValueError("Data tidak boleh kosong.")
+    if np.any(arr < 0):
+        raise ValueError("Data Poisson harus non-negatif.")
+    if not np.all(np.equal(np.mod(arr, 1), 0)):
+        raise ValueError("Data Poisson harus berupa bilangan cacah (integer).")
+
+    return float(arr.sum()) / float(arr.size)
+
+
