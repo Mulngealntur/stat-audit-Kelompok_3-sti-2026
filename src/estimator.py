@@ -53,3 +53,9 @@ def beta_posterior(k, m):
 
     return {"alpha": alpha, "beta": beta, "mode": mode, "mean": mean}
 
+def log_likelihood_poisson(theta, k, n):
+    if np.any(theta <= 0) or np.any(theta >= 1):
+        raise ValueError("Parameter theta harus positif dan k tidak boleh negatif.")
+    if k < 0 or n <= 0 or k > n:
+        raise ValueError("Jumlah keberhasilan (k) harus antara 0 dan n, dan n harus positif.")
+    return k * np.log(theta) + (n - k) * np.log(1 - theta)
