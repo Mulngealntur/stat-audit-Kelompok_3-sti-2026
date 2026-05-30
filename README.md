@@ -1,6 +1,6 @@
 # stat-audit-Kelompok_3-sti-2025
 
-# |stastikal audit terhadap repository open source github `microsoft/vscode`|
+# | stastikal audit terhadap repository open source github `microsoft/vscode` |
 
 
 
