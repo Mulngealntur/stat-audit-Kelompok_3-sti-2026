@@ -54,7 +54,7 @@ def z_test_one_sample(data, mu0, sigma, alpha=0.05, tail="two"):
  
     print("-" * 50)
     if reject:
-        print(f"  Keputusan  : TOLAK H₀")
+        print(f"  Keputusan  : TOLAKk H₀")
         print(f"  Kesimpulan : Cukup bukti μ ≠ {mu0}")
     else:
         print(f"  Keputusan  : GAGAL TOLAK H₀")
