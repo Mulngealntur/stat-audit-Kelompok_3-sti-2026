@@ -1,80 +1,75 @@
-rom math import lgamma
-import numpy as np
-
-def mle_bernoulli(data):
-    arr = np.asarray(data)
-
-    if arr.size == 0:
-        raise ValueError("Data tidak boleh kosong.")
-
-    
-    if arr.dtype == bool:
-        arr = arr.astype(int)
-
-
-    unique_vals = set(np.unique(arr).tolist())
-    if not unique_vals.issubset({0, 1}):
-        raise ValueError(
-            f"Data harus berisi hanya 0/1 atau True/False. "
-            f"Nilai ditemukan: {unique_vals}"
-        )
-
-    k = int(arr.sum())   
-    n = int(arr.size)    
-
-    return k / n
-def mle_poisson(data):
-   
-    arr = np.asarray(data)
-    if arr.size == 0:
-        raise ValueError("Data tidak boleh kosong.")
-    if np.any(arr < 0):
-        raise ValueError("Data Poisson harus non-negatif.")
-    if not np.all(np.equal(np.mod(arr, 1), 0)):
-        raise ValueError("Data Poisson harus berupa bilangan cacah (integer).")
-
-    return float(arr.sum()) / float(arr.size)
-
-def beta_posterior(k, m):
-    if k < 0 or m < 0:
-        raise ValueError("Jumlah keberhasilan (k) dan kegagalan (m) harus non-negatif.")
-    if k == 0 and m == 0:
-        raise ValueError("Tidak dapat menentukan distribusi posterior dengan k=0 dan m=0.")
-
-    alpha = 1 + k
-    beta = 1 + m
-
-    denom = alpha + beta - 2
-
-    mode = (alpha - 1) / denom if denom > 0 else float("nan")
-
-    mean = alpha / (alpha + beta)
-
-    return {"alpha": alpha, "beta": beta, "mode": mode, "mean": mean}
-
-def log_likelihood_bernoulli(theta, k, n):
-    theta = np.asarray(theta, dtype=float)
-    if np.any(theta <= 0) or np.any(theta >= 1):
-        raise ValueError("theta harus berada di interval (0, 1).")
-    
-    if k < 0 or n <= 0 or k > n:
-        raise ValueError("Pastikan 0 ≤ k ≤ n dan n > 0.")
-
-    return k * np.log(theta) + (n - k) * np.log(1 - theta)
-
-def log_likelihood_poisson(theta, data):
-    theta = np.asarray(theta, dtype=float)
-    if np.any(theta <= 0):
-        raise ValueError("theta harus > 0.")
-
-    arr = np.asarray(data)
-    if arr.size == 0:
-        raise ValueError("Data tidak boleh kosong.")
-    if np.any(arr < 0):
-        raise ValueError("Data Poisson harus non-negatif.")
-
-    sum_x = float(arr.sum())
-    n = int(arr.size)
-   
-    sum_log_factorial = float(np.sum([lgamma(int(x) + 1) for x in arr]))
-    return sum_x * np.log(theta) - n * theta - sum_log_factorial
+import math
+ 
+Z_CRITICAL = {
+    0.10: 1.645,
+    0.05: 1.960,
+    0.01: 2.576,
+}
+ 
+def mean(data):
+    return sum(data) / len(data)
+ 
+def z_test_one_sample(data, mu0, sigma, alpha=0.05, tail="two"):
+    """
+    Uji Z satu sampel (σ populasi diketahui).
+ 
+    Parameter:
+    - data  : list nilai sampel
+    - mu0   : rata-rata yang diklaim H₀
+    - sigma : standar deviasi populasi
+    - alpha : tingkat signifikansi (0.10 / 0.05 / 0.01)
+    - tail  : "two", "left", atau "right"
+    """
+    n     = len(data)
+    xbar  = mean(data)
+    se    = sigma / math.sqrt(n)
+    z     = (xbar - mu0) / se
+    z_crit = Z_CRITICAL.get(alpha, 1.960)
+ 
+    print("=" * 50)
+    print("  UJI Z SATU SAMPEL")
+    print("-" * 50)
+    print(f"  Data     : {data}")
+    print(f"  n        : {n}")
+    print(f"  x̄       : {xbar:.4f}")
+    print(f"  μ₀ (H₀) : {mu0}")
+    print(f"  σ        : {sigma}")
+    print(f"  SE       : {se:.4f}")
+    print(f"  Z hitung : {z:.4f}")
+    print("-" * 50)
+    print(f"  H₀ : μ = {mu0}")
+ 
+    if tail == "two":
+        print(f"  H₁ : μ ≠ {mu0}  (two-tailed)")
+        reject = abs(z) > z_crit
+        print(f"  Z kritis : ±{z_crit}  (α={alpha})")
+    elif tail == "right":
+        print(f"  H₁ : μ > {mu0}  (right-tailed)")
+        reject = z > z_crit
+        print(f"  Z kritis : +{z_crit}  (α={alpha})")
+    else:
+        print(f"  H₁ : μ < {mu0}  (left-tailed)")
+        reject = z < -z_crit
+        print(f"  Z kritis : -{z_crit}  (α={alpha})")
+ 
+    print("-" * 50)
+    if reject:
+        print(f"  Keputusan  : TOLAK H₀")
+        print(f"  Kesimpulan : Cukup bukti μ ≠ {mu0}")
+    else:
+        print(f"  Keputusan  : GAGAL TOLAK H₀")
+        print(f"  Kesimpulan : Tidak cukup bukti untuk menolak H₀")
+    print("=" * 50)
+ 
+    return z, reject
+ 
+ 
+if __name__ == "__main__":
+    # Contoh: apakah rata-rata response time server = 200ms?
+    z_test_one_sample(
+        data=[215, 198, 230, 205, 222, 189, 210],
+        mu0=200,
+        sigma=15,
+        alpha=0.05,
+        tail="two"
+    )
