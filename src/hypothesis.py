@@ -65,3 +65,4 @@ def z_test_two_sample(x_bar1, x_bar2, sigma1, sigma2, n1, n2, alternative='two-s
         "interpretation": interpretation
     }
 >>>>>>> Stashed changes
+
