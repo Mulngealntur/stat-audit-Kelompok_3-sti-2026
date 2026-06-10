@@ -65,6 +65,36 @@ python vscode_data_cleaner.py
 jupyter notebook
 ```
 ## Hasil Penemuan
+```bash
+# 1.Tingkat keberhasilan merge Pull Request sangat tinggi
+# - Dari 1.300 Pull Request yang dianalisis, sekitar 87,23% berhasil di-merge.
+# - Confidence Interval 95% berada pada rentang 85,42%–89,04%, menunjukkan estimasi yang stabil dan tingkat ketidakpastian yang rendah.
+# 2.Hasil estimasi Bayesian memperkuat temuan MLE
+# - Distribusi posterior Beta menghasilkan nilai yang sangat dekat dengan estimasi MLE.
+# - Konsistensi antara pendekatan Frequentist dan Bayesian meningkatkan keyakinan bahwa probabilitas merge yang diperoleh merepresentasikan kondisi repositori secara akurat.
+# 3.Terdapat perbedaan signifikan antara performa User dan Bot
+# - Merge rate User mencapai 89,86%, sedangkan Bot hanya 70,45%.
+# - Uji Z menghasilkan Z = 5,4433 dan p-value < 0,05, sehingga perbedaan tersebut terbukti signifikan secara statistik.
+# 4.Kontribusi manusia lebih efektif dibandingkan bot
+# - Pull Request yang diajukan oleh manusia memiliki peluang diterima lebih tinggi dibandingkan Pull Request yang dibuat oleh bot.
+# - Temuan ini mengindikasikan perlunya evaluasi terhadap kualitas dan proses otomatisasi bot.
+# 5.Pengelolaan issue berjalan sangat responsif
+# - Simulasi Monte Carlo sebanyak 50.000 iterasi menunjukkan probabilitas issue tetap terbuka lebih dari 12 hari sebesar 0%.
+# - Seluruh issue dalam sampel berhasil diselesaikan dalam waktu ≤ 12 hari.
+# 6.Bloom Filter terbukti efisien untuk penyaringan data
+# - False Positive Rate (FPR) teoritis hanya 0,0862%.
+# - Pengujian menunjukkan seluruh data valid terdeteksi dengan benar dan data palsu berhasil ditolak.
+# - Solusi ini layak digunakan untuk pemrosesan event Pull Request secara real-time dengan penggunaan memori yang rendah.
+# 7.Prioritas perbaikan repositori berfokus pada kualitas bot
+# - Optimasi MCMC Knapsack mengidentifikasi tiga intervensi paling berdampak:
+# - Bot PR Quality Gate (CI lint & test wajib)
+# - Validasi Pull Request bot sebelum review
+# - Dashboard monitoring waktu review
+# - Ketiga proyek tersebut memberikan nilai dampak tertinggi dengan tetap memenuhi batas kapasitas kerja tim.
+# 8.Kesimpulan penemuan
+# - Repositori VS Code memiliki proses review dan integrasi kontribusi yang sangat baik, ditunjukkan oleh merge rate yang tinggi dan penyelesaian issue yang cepat.
+# - Area yang paling membutuhkan perhatian adalah peningkatan kualitas Pull Request yang dihasilkan oleh bot agar performanya dapat mendekati kontribusi manusia.
+```
 
 ## Sumber Pengambilan Data
 
