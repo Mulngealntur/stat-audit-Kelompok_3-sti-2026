@@ -23,6 +23,8 @@
 | E | Muhammad Fadhil | 1519625061 | Computation Analyst |
 
 ## Struktur Repository
+
+```
 stat-audit-moby-sti-2025/
   → README.md
   → AI_USAGE_LOG.md
@@ -45,6 +47,7 @@ stat-audit-moby-sti-2025/
   → presentation/
       → video_link.md
   → requirements.txt
+```
 
 ## Cara memakai/menjalankan
 
